@@ -11,7 +11,7 @@ import nova.android.novastore.data.local.RoomStoreDatabase
 import nova.android.novastore.data.local.dao.BookDao
 import nova.android.novastore.data.remote.BookApi
 import nova.android.novastore.data.remote.RemoteBookDataSource
-import nova.android.novastore.data.repository.BookRepository
+import nova.android.novastore.domain.repository.BookRepository
 import nova.android.novastore.data.repository.BookRepositoryImpl
 import javax.inject.Singleton
 

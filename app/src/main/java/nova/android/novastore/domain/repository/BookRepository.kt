@@ -1,6 +1,6 @@
-package nova.android.novastore.data.repository
+package nova.android.novastore.domain.repository
 
-import nova.android.novastore.data.model.Book
+import nova.android.novastore.domain.model.Book
 
 interface BookRepository {
     suspend fun getBooks(): List<Book>
