@@ -25,7 +25,7 @@ abstract class RoomStoreDatabase : RoomDatabase() {
                 )
                     // Wipes and rebuilds instead of migrating if no Migration object.
                     // Migration is not covered in this basic example.
-                    .fallbackToDestructiveMigration() // Be cautious with this in production
+                    .fallbackToDestructiveMigration(true) // Be cautious with this in production - true means drop all tables
                     .build()
                 INSTANCE = instance
                 instance

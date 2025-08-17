@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -11,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "nova.android.novastore"
-        minSdk = 33
+        minSdk = 34
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -32,25 +33,44 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-
+    kotlinOptions {
+        jvmTarget = "17"
+    }
     buildFeatures {
         compose = true
+        buildConfig = true
+        viewBinding = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.8"
+        kotlinCompilerExtensionVersion = "1.6.0"
     }
+    // Room schema location is configured through KSP
 }
 
-// Add the kotlin block to configure compiler options
-kotlin {
-    jvmToolchain(17) // Sets the JDK version for Kotlin compilation
-}
+// Kotlin configuration is now handled in the KSP configuration section below
 
 // KSP configuration to reduce warnings
 ksp {
     arg("dagger.fastInit", "enabled")
     arg("dagger.hilt.android.internal.disableAndroidSuperclassValidation", "false")
     arg("dagger.hilt.android.internal.projectType", "android")
+    
+    // Room schema location
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
+// Kotlin configuration with enhanced features
+kotlin {
+    jvmToolchain(17)
+    
+    // Enable new language features
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xjvm-default=all",
+            "-opt-in=kotlin.RequiresOptIn",
+            "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+        )
+    }
 }
 
 // Suppress KSP incremental compilation warnings
@@ -68,23 +88,6 @@ hilt {
     enableAggregatingTask = false
 }
 
-// Suppress deprecation warnings and configure Java compilation
-tasks.withType<JavaCompile> {
-    options.compilerArgs.add("-Xlint:-deprecation")
-    options.compilerArgs.add("-Xlint:-processing")
-}
-
-// Suppress KSP warnings about incremental compilation
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-Xsuppress-version-warnings",
-            "-Xskip-prerelease-check"
-        )
-    }
-}
-
-
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -99,6 +102,16 @@ dependencies {
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
+
+    // Navigation
+    implementation(libs.navigation.compose)
+
+    // Image loading
+    implementation(libs.coil.compose)
+
+    // Coroutines
+    implementation(libs.kotlinx.coroutines.android)
+    testImplementation(libs.kotlinx.coroutines.test)
 
     // Retrofit for networking
     implementation(libs.retrofit)
