@@ -6,7 +6,4 @@ import dagger.hilt.android.HiltAndroidApp
 @HiltAndroidApp
 class NovaStoreApplication : Application() {
 
-    override fun onCreate() {
-        super.onCreate()
-    }
 }

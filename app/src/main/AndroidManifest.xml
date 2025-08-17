@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NovaStore">
         <activity
-            android:name=".MainActivity"
+            android:name=".feature.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.NovaStore">
             <intent-filter>

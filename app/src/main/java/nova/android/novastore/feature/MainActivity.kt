@@ -1,4 +1,4 @@
-package nova.android.novastore
+package nova.android.novastore.feature
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
