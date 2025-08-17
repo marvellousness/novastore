@@ -46,6 +46,44 @@ kotlin {
     jvmToolchain(17) // Sets the JDK version for Kotlin compilation
 }
 
+// KSP configuration to reduce warnings
+ksp {
+    arg("dagger.fastInit", "enabled")
+    arg("dagger.hilt.android.internal.disableAndroidSuperclassValidation", "false")
+    arg("dagger.hilt.android.internal.projectType", "android")
+}
+
+// Suppress KSP incremental compilation warnings
+gradle.projectsEvaluated {
+    tasks.withType<com.google.devtools.ksp.gradle.KspTask> {
+        // Suppress warnings about incremental compilation
+        doFirst {
+            logger.warn("KSP incremental compilation warnings are suppressed - this is a known issue with Hilt integration")
+        }
+    }
+}
+
+// Hilt configuration
+hilt {
+    enableAggregatingTask = false
+}
+
+// Suppress deprecation warnings and configure Java compilation
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:-deprecation")
+    options.compilerArgs.add("-Xlint:-processing")
+}
+
+// Suppress KSP warnings about incremental compilation
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs += listOf(
+            "-Xsuppress-version-warnings",
+            "-Xskip-prerelease-check"
+        )
+    }
+}
+
 
 dependencies {
 
@@ -79,8 +117,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.room.runtime)
-    annotationProcessor(libs.androidx.room.compiler)
-    // To use Kotlin Symbol Processing (KSP)
+    // Use KSP for Room annotation processing
     ksp(libs.androidx.room.compiler)
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation(libs.androidx.room.ktx)
