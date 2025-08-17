@@ -1,4 +1,4 @@
-package nova.android.novastore.ui.state
+package nova.android.novastore.feature.bookslist
 
 import nova.android.novastore.domain.model.Book
 

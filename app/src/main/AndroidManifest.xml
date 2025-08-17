@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NovaStore">
         <activity
-            android:name=".feature.MainActivity"
+            android:name=".feature.bookslist.BookListActivity"
             android:exported="true"
             android:theme="@style/Theme.NovaStore">
             <intent-filter>

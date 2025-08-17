@@ -17,7 +17,7 @@ import javax.inject.Singleton
 object AppModule {
 
     // IMPORTANT: Replace this with your actual API base URL
-    private const val BASE_URL = "https://api.yourdomain.com/"
+    private const val BASE_URL = "https://jsonplaceholder.typicode.com/"
 
     @Provides
     @Singleton
