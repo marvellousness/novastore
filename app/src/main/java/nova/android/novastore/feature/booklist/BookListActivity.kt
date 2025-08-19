@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Refresh
@@ -21,6 +22,9 @@ import androidx.compose.ui.unit.dp
 import dagger.hilt.android.AndroidEntryPoint
 import nova.android.novastore.ui.theme.NovaStoreTheme
 import nova.android.novastore.domain.model.Book
+import androidx.compose.ui.platform.LocalContext
+import android.content.Intent
+import nova.android.novastore.feature.bookdetail.BookDetailActivity
 
 @AndroidEntryPoint
 class BookListActivity : ComponentActivity() {
@@ -247,22 +251,30 @@ fun BookList(
 	modifier: Modifier = Modifier,
 	isRefreshing: Boolean = false
 ) {
+	val context = LocalContext.current
 	LazyColumn(
 		modifier = Modifier.fillMaxSize(),
 		contentPadding = PaddingValues(16.dp),
 		verticalArrangement = Arrangement.spacedBy(8.dp)
 	) {
 		items(books) { book ->
-			BookItem(book = book)
+			BookItem(book = book, onClick = { selected ->
+				val intent = Intent(context, BookDetailActivity::class.java).apply {
+					putExtra(BookDetailActivity.EXTRA_BOOK_ID, selected.id.toString())
+				}
+				context.startActivity(intent)
+			})
 		}
 	}
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookItem(book: Book) {
+fun BookItem(book: Book, onClick: (Book) -> Unit = {}) {
 	Card(
-		modifier = Modifier.fillMaxWidth(),
+		modifier = Modifier
+			.fillMaxWidth()
+			.clickable { onClick(book) },
 		elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
 	) {
 		Column(

@@ -17,6 +17,7 @@ import nova.android.novastore.domain.usecase.GetBooksUseCase
 import nova.android.novastore.domain.usecase.SearchBooksUseCase
 import nova.android.novastore.domain.usecase.ClearLocalDataUseCase
 import nova.android.novastore.domain.usecase.GetBooksFlowUseCase
+import nova.android.novastore.domain.usecase.GetBookByIdUseCase
 import javax.inject.Singleton
 
 @Module
@@ -70,4 +71,9 @@ object DatabaseModule {
     fun provideGetBooksFlowUseCase(
         bookRepository: BookRepository
     ): GetBooksFlowUseCase = GetBooksFlowUseCase(bookRepository)
+
+    @Provides
+    fun provideGetBookByIdUseCase(
+        bookRepository: BookRepository
+    ): GetBookByIdUseCase = GetBookByIdUseCase(bookRepository)
 }
