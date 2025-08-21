@@ -7,6 +7,7 @@ import nova.android.novastore.domain.repository.BookRepository
 import nova.android.novastore.data.local.mapper.toDomain
 import android.util.Log
 import kotlinx.coroutines.flow.Flow
+import nova.android.novastore.domain.model.ApiResult
 
 class BookRepositoryImpl(
     private val remoteDataSource: RemoteBookDataSource,
@@ -24,15 +25,21 @@ class BookRepositoryImpl(
 
     // Commands/one-off operations
     override suspend fun refreshBooks(): List<Book> {
-        return try {
-            val remoteBookDtos = remoteDataSource.getBooks()
-            val remoteBooks = remoteBookDtos.map { it.toDomain() }
-            localDataSource.saveBooks(remoteBooks)
-            Log.d("BookRepository", "Books refreshed successfully")
-            remoteBooks
-        } catch (e: Exception) {
-            Log.e("BookRepository", "Failed to refresh books", e)
-            throw e
+        return when (val result = remoteDataSource.getBooks()) {
+            is ApiResult.Success -> {
+                val remoteBooks = result.data.map { it.toDomain() }
+                localDataSource.saveBooks(remoteBooks)
+                Log.d("BookRepository", "Books refreshed successfully")
+                remoteBooks
+            }
+            is ApiResult.Error -> {
+                Log.e("BookRepository", "Failed to refresh books", result.exception)
+                throw result.exception
+            }
+            ApiResult.Loading -> {
+                // Not expected in a one-shot call; treat as no data
+                emptyList()
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
+import nova.android.novastore.data.remote.adapter.ApiResultCallAdapterFactory
 
 
 @Module
@@ -43,6 +44,7 @@ object AppModule {
             .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(ApiResultCallAdapterFactory())
             .build()
     }
 
