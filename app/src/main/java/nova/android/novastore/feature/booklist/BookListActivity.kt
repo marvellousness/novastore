@@ -29,7 +29,7 @@ import nova.android.novastore.feature.bookdetail.BookDetailActivity
 @AndroidEntryPoint
 class BookListActivity : ComponentActivity() {
 	
-	private val viewModel: BookViewModel by viewModels()
+	private val viewModel: BookListViewModel by viewModels()
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -48,7 +48,7 @@ class BookListActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookListScreen(
-	viewModel: BookViewModel,
+	viewModel: BookListViewModel,
 	modifier: Modifier = Modifier
 ) {
 	val uiState by viewModel.uiState.collectAsState()

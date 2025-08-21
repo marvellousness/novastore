@@ -34,6 +34,9 @@ class LocalBookDataSource @Inject constructor(private val bookDao: BookDao) {
         }
     }
 
+    fun observeBookById(id: String): Flow<Book?> =
+        bookDao.observeBookById(id).map { it?.toDomain() }
+
     // New method: Search books
     suspend fun searchBooks(query: String): List<Book> {
         return try {
@@ -43,6 +46,11 @@ class LocalBookDataSource @Inject constructor(private val bookDao: BookDao) {
             emptyList()
         }
     }
+
+    fun searchBooksFlow(query: String): Flow<List<Book>> =
+        bookDao.searchBooksFlow("%$query%").map { entities ->
+            entities.map { it.toDomain() }
+        }
 
     // New method: Clear all books
     suspend fun clearAllBooks() {
